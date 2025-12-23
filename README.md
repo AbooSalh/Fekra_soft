@@ -61,6 +61,8 @@ Before running the application, ensure you have the following installed:
 
 ## 🚀 Quick Start
 
+**New to KheirBox?** Check out our [📖 QUICKSTART Guide](QUICKSTART.md) for a 5-minute setup!
+
 ### 1. Clone the Repository
 
 ```bash
@@ -88,7 +90,7 @@ This command will:
 
 ### 4. Default Credentials
 
-On first run, you can register new accounts. The first admin account should be created through the registration flow and approved manually in the database.
+Create an admin account following the instructions in [QUICKSTART.md](QUICKSTART.md#creating-the-first-admin-user).
 
 ## 📱 User Roles
 
@@ -205,6 +207,26 @@ NEXT_PUBLIC_API_URL=http://localhost:8080/api
 ```
 
 ## 🐳 Docker Commands
+
+### Using Convenience Scripts
+
+```bash
+# Start the application
+./start.sh
+
+# Stop the application
+./stop.sh
+
+# View logs (all services)
+./logs.sh
+
+# View logs for specific service
+./logs.sh backend
+./logs.sh frontend
+./logs.sh db
+```
+
+### Manual Docker Commands
 
 ```bash
 # Start all services
