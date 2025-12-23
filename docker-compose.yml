@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: kheirbox-db
+    environment:
+      POSTGRES_DB: kheirbox
+      POSTGRES_USER: kheirbox
+      POSTGRES_PASSWORD: kheirbox123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kheirbox-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kheirbox"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kheirbox-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/kheirbox
+      SPRING_DATASOURCE_USERNAME: kheirbox
+      SPRING_DATASOURCE_PASSWORD: kheirbox123
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - kheirbox-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: kheirbox-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api
+    depends_on:
+      - backend
+    networks:
+      - kheirbox-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  kheirbox-network:
+    driver: bridge
